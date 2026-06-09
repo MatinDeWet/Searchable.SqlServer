@@ -104,11 +104,4 @@ Search terms are trimmed, split on whitespace, and escaped before being used in 
 - `Searchable.SqlServer.Contracts.ISearchableRequest`
 - `Searchable.SqlServer.Enums.ILikeMatchModeEnum`
 
-## Package Notes
-
-- Package ID: `MatinDeWet.Searchable.SqlServer`
-- Target framework: `net10.0`
-- License: `GPL-3.0-only`
-- Symbols: published as `.snupkg`
-
 The package uses the GPL-3.0-only license, and GitHub Sponsors support is configured through `.github/FUNDING.yml`.
