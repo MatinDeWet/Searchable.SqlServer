@@ -8,8 +8,8 @@
     <PackageId>MatinDeWet.Searchable.SqlServer</PackageId>
     <Version>1.0.0</Version>
     <Authors>MatinDeWet</Authors>
-    <Description>SQL Server-specific dynamic search helpers for Entity Framework Core.</Description>
-    <PackageTags>searchable;sqlserver;efcore;entityframework;like</PackageTags>
+    <Description>SQL Server-specific dynamic search helpers for Entity Framework Core with LIKE-based filtering.</Description>
+    <PackageTags>searchable;sqlserver;entityframeworkcore;efcore;like;nuget;dotnet</PackageTags>
     <PackageProjectUrl>https://github.com/MatinDeWet/Searchable.SqlServer</PackageProjectUrl>
 
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
