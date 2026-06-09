@@ -25,7 +25,7 @@ public class SearchableExtensionsTests
     {
         var expression = SearchableExtensions.BuildDynamicSearchExpression<SampleEntity>(
             new SearchableRequest("   "),
-            [entity => entity.Name]);
+            [entity => entity.Name!]);
 
         Assert.True(expression.Compile()(new SampleEntity { Name = "anything" }));
     }

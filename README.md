@@ -27,3 +27,5 @@ query = query.DynamicLikeSearch(
 ## Repository
 
 This repository is packaged as a NuGet library and includes GitHub Actions workflows for CI and release publishing.
+
+The package and repository use the GPL-3.0-only license, and GitHub Sponsors support is configured through `.github/FUNDING.yml`.
