@@ -15,9 +15,14 @@ dotnet add package MatinDeWet.Searchable.SqlServer
 - Builds dynamic search expressions from a request object or raw search terms.
 - Supports `Contains`, `StartsWith`, `EndsWith`, and `Exact` matching modes.
 - Escapes SQL Server wildcard characters before composing the query.
+- Lets you combine multiple properties and multiple search terms with `AND` / `OR` logic.
 - Keeps the API small so it can stay provider-specific and easy to mirror later for PostgreSQL.
 
-## Usage
+## Usages
+
+### 1. Request-based search over a queryable
+
+Use this when your request object already carries a search term.
 
 ```csharp
 using Searchable.SqlServer;
@@ -33,6 +38,66 @@ query = query.DynamicLikeSearch(
     ILikeMatchModeEnum.Contains);
 ```
 
+`DynamicLikeSearch` removes empty input handling from the calling code and returns the original query when the request or search term is blank.
+
+### 2. Search a queryable with raw terms
+
+Use this when you already have a collection of terms and do not want to wrap them in a request object.
+
+```csharp
+ICollection<string> terms = ["al", "ex"];
+
+query = query.DynamicLikeSearch(
+    terms,
+    [person => person.FirstName, person => person.LastName],
+    ILikeMatchModeEnum.StartsWith,
+    termLogic: true,
+    propertyLogic: true);
+```
+
+In this example, both terms must match because `termLogic: true` uses `AND`, while either property may match because `propertyLogic: true` uses `OR`.
+
+### 3. Build a reusable expression from a request
+
+Use this when you want to build an `Expression<Func<T, bool>>` and pass it into a LINQ `Where` later.
+
+```csharp
+Expression<Func<Person, bool>> predicate = SearchableExtensions.BuildDynamicSearchExpression<Person>(
+    request,
+    [person => person.FirstName, person => person.LastName],
+    ILikeMatchModeEnum.Contains);
+
+query = query.Where(predicate);
+```
+
+### 4. Build a reusable expression from raw terms
+
+Use this when the search terms are already in memory and you want to compose a predicate first.
+
+```csharp
+Expression<Func<Person, bool>> predicate = SearchableExtensions.BuildDynamicSearchExpression<Person>(
+    ["al", "ex"],
+    [person => person.FirstName, person => person.LastName],
+    ILikeMatchModeEnum.Contains,
+    termLogic: false,
+    propertyLogic: true);
+
+query = query.Where(predicate);
+```
+
+### 5. Match modes
+
+`ILikeMatchModeEnum` controls the generated SQL Server `LIKE` pattern.
+
+- `Contains` matches anywhere in the string.
+- `StartsWith` matches values that begin with the term.
+- `EndsWith` matches values that end with the term.
+- `Exact` matches the value exactly.
+
+### 6. Search term normalization
+
+Search terms are trimmed, split on whitespace, and escaped before being used in the query. That means input like `"  al   ex  "` becomes two search terms, and special SQL Server wildcard characters are safely escaped.
+
 ## API Surface
 
 - `Searchable.SqlServer.SearchableExtensions`
@@ -46,8 +111,4 @@ query = query.DynamicLikeSearch(
 - License: `GPL-3.0-only`
 - Symbols: published as `.snupkg`
 
-## Repository
-
-This repository includes GitHub Actions workflows for CI and NuGet publishing.
-
-The package and repository use the GPL-3.0-only license, and GitHub Sponsors support is configured through `.github/FUNDING.yml`.
+The package uses the GPL-3.0-only license, and GitHub Sponsors support is configured through `.github/FUNDING.yml`.
