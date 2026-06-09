@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Shouldly;
 using Searchable.SqlServer.Contracts;
 using Searchable.SqlServer.Enums;
 
@@ -12,7 +13,7 @@ public class SearchableExtensionsTests
     {
         string[] result = SearchableExtensions.SplitSearchTermIntoWords("   ");
 
-        Assert.Empty(result);
+        result.ShouldBeEmpty();
     }
 
     [Fact]
@@ -20,7 +21,7 @@ public class SearchableExtensionsTests
     {
         string[] result = SearchableExtensions.SplitSearchTermIntoWords("  alpha   beta  gamma ");
 
-        Assert.Equal(new[] { "alpha", "beta", "gamma" }, result);
+        result.ShouldBe(new[] { "alpha", "beta", "gamma" });
     }
 
     [Fact]
@@ -30,8 +31,8 @@ public class SearchableExtensionsTests
 
         string[] result = SearchableExtensions.SplitSearchTermIntoWords(searchTerm);
 
-        Assert.Single(result);
-        Assert.Equal(1000, result[0].Length);
+        result.ShouldHaveSingleItem();
+        result[0].Length.ShouldBe(1000);
     }
 
     [Theory]
@@ -42,7 +43,7 @@ public class SearchableExtensionsTests
     {
         string result = SearchableExtensions.CleanSearchTermForLike(input);
 
-        Assert.Equal(expected, result);
+        result.ShouldBe(expected);
     }
 
     [Fact]
@@ -55,7 +56,7 @@ public class SearchableExtensionsTests
             (ISearchableRequest)null!,
             new Expression<Func<SamplePerson, string>>[] { person => person.FirstName! });
 
-        Assert.Same(query, result);
+        result.ShouldBeSameAs(query);
     }
 
     [Fact]
@@ -68,7 +69,7 @@ public class SearchableExtensionsTests
             new SearchableRequest("   "),
             new Expression<Func<SamplePerson, string>>[] { person => person.FirstName! });
 
-        Assert.Same(query, result);
+        result.ShouldBeSameAs(query);
     }
 
     [Fact]
@@ -87,10 +88,10 @@ public class SearchableExtensionsTests
 
         string sql = query.ToQueryString();
 
-        Assert.Contains("LIKE", sql, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("AND", sql, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("OR", sql, StringComparison.OrdinalIgnoreCase);
-        Assert.Equal(4, CountOccurrences(sql, "LIKE"));
+        sql.ShouldContain("LIKE");
+        sql.ShouldContain("AND");
+        sql.ShouldContain("OR");
+        CountOccurrences(sql, "LIKE").ShouldBe(4);
     }
 
     [Theory]
@@ -111,7 +112,7 @@ public class SearchableExtensionsTests
 
         string sql = query.ToQueryString();
 
-        Assert.Contains(expectedPattern, sql, StringComparison.OrdinalIgnoreCase);
+        sql.ShouldContain(expectedPattern);
     }
 
     [Fact]
@@ -124,7 +125,7 @@ public class SearchableExtensionsTests
             new[] { "   ", "" },
             new Expression<Func<SamplePerson, string>>[] { person => person.FirstName! });
 
-        Assert.Same(query, result);
+        result.ShouldBeSameAs(query);
     }
 
     [Fact]
@@ -145,8 +146,8 @@ public class SearchableExtensionsTests
 
         string sql = query.ToQueryString();
 
-        Assert.Contains("LIKE", sql, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("AND", sql, StringComparison.OrdinalIgnoreCase);
+        sql.ShouldContain("LIKE");
+        sql.ShouldContain("AND");
     }
 
     [Fact]
@@ -156,7 +157,7 @@ public class SearchableExtensionsTests
             (ISearchableRequest)null!,
             new Expression<Func<SamplePerson, string>>[] { person => person.FirstName! });
 
-        Assert.True(expression.Compile()(new SamplePerson()));
+        expression.Compile()(new SamplePerson()).ShouldBeTrue();
     }
 
     [Fact]
@@ -166,7 +167,7 @@ public class SearchableExtensionsTests
             new SearchableRequest("   "),
             new Expression<Func<SamplePerson, string>>[] { person => person.FirstName! });
 
-        Assert.True(expression.Compile()(new SamplePerson()));
+        expression.Compile()(new SamplePerson()).ShouldBeTrue();
     }
 
     [Fact]
@@ -185,9 +186,9 @@ public class SearchableExtensionsTests
 
         string sql = context.People.Where(predicate).ToQueryString();
 
-        Assert.Contains("LIKE", sql, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("AND", sql, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("OR", sql, StringComparison.OrdinalIgnoreCase);
+        sql.ShouldContain("LIKE");
+        sql.ShouldContain("AND");
+        sql.ShouldContain("OR");
     }
 
     [Fact]
@@ -197,7 +198,7 @@ public class SearchableExtensionsTests
             new[] { "", "   " },
             new Expression<Func<SamplePerson, string>>[] { person => person.FirstName! });
 
-        Assert.True(expression.Compile()(new SamplePerson()));
+        expression.Compile()(new SamplePerson()).ShouldBeTrue();
     }
 
     [Theory]
@@ -218,7 +219,7 @@ public class SearchableExtensionsTests
 
         string sql = context.People.Where(predicate).ToQueryString();
 
-        Assert.Contains(expectedPattern, sql, StringComparison.OrdinalIgnoreCase);
+        sql.ShouldContain(expectedPattern);
     }
 
     private static SearchableTestContext CreateContext()
