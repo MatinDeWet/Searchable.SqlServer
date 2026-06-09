@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Searchable.SqlServer.UnitTests/Searchable.SqlServer.UnitTests.csproj" />
+  <Project Path="Searchable.SqlServer/Searchable.SqlServer.csproj" />
+</Solution>
