@@ -1,5 +1,9 @@
 # Searchable.SqlServer
 
+[![NuGet Version](https://img.shields.io/nuget/v/MatinDeWet.Searchable.SqlServer)](https://www.nuget.org/packages/MatinDeWet.Searchable.SqlServer)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/MatinDeWet/Searchable.SqlServer/CI.yml?branch=master)](https://github.com/MatinDeWet/Searchable.SqlServer/actions/workflows/CI.yml)
+[![Publish Status](https://img.shields.io/github/actions/workflow/status/MatinDeWet/Searchable.SqlServer/nuget-publish.yml?branch=master)](https://github.com/MatinDeWet/Searchable.SqlServer/actions/workflows/nuget-publish.yml)
+
 SQL Server-specific dynamic search helpers for Entity Framework Core.
 
 This package provides a small, focused API for building `LIKE`-based search filters over `IQueryable<T>` using SQL Server semantics. It is intended to be consumed as a NuGet package and versioned like one.
