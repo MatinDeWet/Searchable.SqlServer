@@ -108,4 +108,4 @@ Search terms are trimmed, split on whitespace, and escaped before being used in 
 - `Searchable.SqlServer.Contracts.ISearchableRequest`
 - `Searchable.SqlServer.Enums.ILikeMatchModeEnum`
 
-The package uses the GPL-3.0-only license, and GitHub Sponsors support is configured through `.github/FUNDING.yml`.
+The package uses the GPL-3.0-only license.
